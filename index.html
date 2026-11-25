@@ -1,0 +1,460 @@
+<!doctype html>
+<!-- Vị trí file: wp-content/gb-tools/calculators/cong-cu-tinh-gia-tri-trang.html -->
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Công cụ tính giá trị trang (Page Value &amp; RPM Calculator) online</title>
+<meta name="description" content="Tính giá trị mỗi lượt xem trang, RPM, xếp hạng hiệu suất theo ngành, mục tiêu lưu lượng truy cập và dự báo doanh thu tháng/năm trực tiếp trên trình duyệt.">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4.1.11"></script>
+<style type="text/tailwindcss">
+  @theme {
+    --font-sans: Roboto, ui-sans-serif, system-ui, sans-serif;
+    --color-primary: #fdca1e; --color-primary-hover: #e8b008; --color-primary-soft: #fffbeb;
+    --color-primary-ink: #9c6406; --color-ink: #0f172a; --color-neutral: #e2e8f0;
+  }
+</style>
+</head>
+<body class="bg-white font-sans text-ink antialiased">
+<main class="mx-auto max-w-4xl p-4 sm:p-6 space-y-6">
+
+  <!-- 1. THỬ CÁC KỊCH BẢN VÍ DỤ -->
+  <div class="border-2 border-dashed border-amber-300 bg-primary-soft/65 rounded-2xl p-5 space-y-4">
+    <div class="text-xs font-bold uppercase tracking-wider text-primary-ink flex items-center gap-1.5">
+      <span>&#9734;</span>
+      <span>THỬ CÁC KỊCH BẢN VÍ DỤ</span>
+    </div>
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 text-center">
+      <button type="button" onclick="applyScenario('tech')" class="rounded-xl border-2 border-primary bg-white hover:bg-primary-soft p-3.5 transition-all cursor-pointer shadow-2xs space-y-1">
+        <div class="font-bold text-xs text-ink">Blog công nghệ</div>
+        <div class="text-xs text-slate-500 font-mono">$1,500 / 75K lượt xem</div>
+      </button>
+
+      <button type="button" onclick="applyScenario('finance')" class="rounded-xl border-2 border-primary bg-white hover:bg-primary-soft p-3.5 transition-all cursor-pointer shadow-2xs space-y-1">
+        <div class="font-bold text-xs text-ink">Trang tài chính</div>
+        <div class="text-xs text-slate-500 font-mono">$5,000 / 100K lượt xem</div>
+      </button>
+
+      <button type="button" onclick="applyScenario('news')" class="rounded-xl border-2 border-primary bg-white hover:bg-primary-soft p-3.5 transition-all cursor-pointer shadow-2xs space-y-1">
+        <div class="font-bold text-xs text-ink">Cổng thông tin</div>
+        <div class="text-xs text-slate-500 font-mono">$800 / 200K lượt xem</div>
+      </button>
+
+      <button type="button" onclick="applyScenario('ecommerce')" class="rounded-xl border-2 border-primary bg-white hover:bg-primary-soft p-3.5 transition-all cursor-pointer shadow-2xs space-y-1">
+        <div class="font-bold text-xs text-ink">Thương mại điện tử</div>
+        <div class="text-xs text-slate-500 font-mono">$2,500 / 50K lượt xem</div>
+      </button>
+    </div>
+  </div>
+
+  <!-- 2. KHUNG NHẬP LIỆU: MÁY TÍNH GIÁ TRỊ TRANG -->
+  <div class="bg-white border border-neutral rounded-2xl p-6 shadow-xs space-y-6">
+    <div class="flex items-start gap-3.5 border-b border-neutral pb-4">
+      <div class="w-11 h-11 rounded-xl bg-primary text-ink font-bold text-lg flex items-center justify-center shrink-0 shadow-2xs">
+        $
+      </div>
+      <div>
+        <h1 class="font-bold text-lg text-ink leading-snug">Máy tính giá trị trang</h1>
+        <p class="text-xs text-slate-500 mt-0.5">Nhập các chỉ số trang web của bạn để phân tích việc kiếm tiền</p>
+      </div>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+      <!-- Doanh thu trang web -->
+      <div class="space-y-1.5">
+        <label for="revenueInput" class="block text-xs font-bold text-ink">Doanh thu trang web</label>
+        <div class="relative">
+          <span class="absolute left-3.5 top-1/2 -translate-y-1/2 text-sm font-mono font-bold text-slate-400">$</span>
+          <input type="number" id="revenueInput" value="1500" min="0" step="any" class="w-full rounded-xl border border-neutral pl-8 pr-3.5 py-3 text-sm font-mono font-bold text-ink outline-none focus:border-primary bg-white">
+        </div>
+      </div>
+
+      <!-- Tổng lượt xem trang -->
+      <div class="space-y-1.5">
+        <label for="pageviewsInput" class="block text-xs font-bold text-ink">Tổng lượt xem trang</label>
+        <input type="number" id="pageviewsInput" value="75000" min="1" step="1" class="w-full rounded-xl border border-neutral px-3.5 py-3 text-sm font-mono font-bold text-ink outline-none focus:border-primary bg-white">
+      </div>
+
+      <!-- Khoảng thời gian -->
+      <div class="space-y-1.5">
+        <label for="periodSelect" class="block text-xs font-bold text-ink">Khoảng thời gian</label>
+        <select id="periodSelect" class="w-full rounded-xl border border-neutral p-3 text-sm font-medium text-ink outline-none focus:border-primary bg-white cursor-pointer">
+          <option value="daily">Hàng ngày</option>
+          <option value="weekly">Hàng tuần</option>
+          <option value="monthly" selected>Hàng tháng</option>
+          <option value="quarterly">Hàng quý</option>
+          <option value="yearly">Hàng năm</option>
+        </select>
+      </div>
+
+      <!-- Ngành nghề -->
+      <div class="space-y-1.5">
+        <label for="industrySelect" class="block text-xs font-bold text-ink">Ngành nghề</label>
+        <select id="industrySelect" class="w-full rounded-xl border border-neutral p-3 text-sm font-medium text-ink outline-none focus:border-primary bg-white cursor-pointer">
+          <option value="finance">Tài chính &amp; Bảo hiểm</option>
+          <option value="tech" selected>Công nghệ</option>
+          <option value="ecommerce">Thương mại điện tử</option>
+          <option value="health">Sức khỏe &amp; Sống khỏe</option>
+          <option value="travel">Du lịch &amp; Lữ hành</option>
+          <option value="entertainment">Giải trí</option>
+          <option value="news">Tin tức &amp; Truyền thông</option>
+          <option value="education">Giáo dục</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- Nút Tính giá trị lượt xem trang -->
+    <button type="button" onclick="calculatePageValue()" class="w-full min-h-12 rounded-xl bg-slate-900 hover:bg-slate-800 px-6 font-bold text-sm text-primary shadow-xs cursor-pointer transition-colors flex items-center justify-center gap-2">
+      <span>&#128187;</span>
+      <span>Tính giá trị lượt xem trang</span>
+    </button>
+  </div>
+
+  <!-- 3. KHU VỰC KẾT QUẢ PHÂN TÍCH -->
+  <div id="resultsWrapper" class="space-y-6">
+
+    <!-- Card Hero Tối Màu: Giá trị trên mỗi lượt xem trang -->
+    <div class="rounded-2xl bg-slate-900 text-white p-6 sm:p-8 shadow-md space-y-6">
+      <div class="flex items-center justify-between flex-wrap gap-2">
+        <span id="periodBadge" class="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-slate-800 border border-slate-700 text-xs font-bold uppercase tracking-wider text-primary">
+          <span>&#8627;</span>
+          <span>PHÂN TÍCH THEO HÀNG THÁNG</span>
+        </span>
+      </div>
+
+      <div class="text-center space-y-2 py-2">
+        <div class="text-xs font-bold uppercase tracking-widest text-slate-400">GIÁ TRỊ TRÊN MỖI LƯỢT XEM TRANG</div>
+        <div id="heroPageValue" class="text-4xl sm:text-5xl font-mono font-bold text-primary tracking-tight">$0.020000</div>
+        <div id="heroSummaryLine" class="text-sm text-slate-300">Dựa trên doanh thu $1500.00 từ 75,000 lượt xem trang</div>
+      </div>
+
+      <div class="border-t border-slate-800 pt-5 grid grid-cols-1 sm:grid-cols-3 gap-4 text-center">
+        <div class="space-y-1">
+          <div id="heroRpm" class="text-xl sm:text-2xl font-mono font-bold text-primary">$20.0000</div>
+          <div class="text-[11px] font-bold uppercase tracking-wider text-slate-400">RPM / TƯƠNG ĐƯƠNG CPM</div>
+        </div>
+        <div class="space-y-1">
+          <div id="heroRevPerVisitor" class="text-xl sm:text-2xl font-mono font-bold text-primary">$0.0500</div>
+          <div class="text-[11px] font-bold uppercase tracking-wider text-slate-400">DOANH THU MỖI KHÁCH TRUY CẬP</div>
+        </div>
+        <div class="space-y-1">
+          <div id="heroPageviews" class="text-xl sm:text-2xl font-mono font-bold text-primary">75,000</div>
+          <div class="text-[11px] font-bold uppercase tracking-wider text-slate-400">LƯỢT XEM TRANG</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Xếp hạng hiệu suất & 4 Thẻ chỉ số -->
+    <div class="bg-white border border-neutral rounded-2xl p-6 shadow-xs space-y-5">
+      <div class="flex items-center justify-between flex-wrap gap-2">
+        <div class="font-bold text-base text-ink flex items-center gap-2">
+          <span class="text-primary-ink">&#9614;&#9614;</span>
+          <span>Xếp hạng hiệu suất</span>
+        </div>
+        <span id="perfRankBadge" class="px-3.5 py-1 rounded-full bg-primary-soft border border-amber-300 text-primary-ink text-xs font-bold">
+          — Trung bình
+        </span>
+      </div>
+
+      <!-- Thanh tiến trình -->
+      <div class="h-2.5 w-full rounded-full bg-slate-100 overflow-hidden">
+        <div id="perfProgressBar" class="h-full rounded-full bg-primary transition-all duration-300" style="width: 50%"></div>
+      </div>
+
+      <!-- Hộp nhận xét hiệu suất -->
+      <div id="perfDescriptionBox" class="rounded-xl bg-slate-50 border border-neutral p-4 text-xs sm:text-sm text-slate-600 leading-relaxed">
+        Giá trị lượt xem trang của bạn nằm trong phạm vi điển hình của ngành. Giá trị lượt xem trang của bạn được so sánh với điểm chuẩn ngành Công nghệ (Thấp: $0.01, TB: $0.05, Cao: $0.15).
+      </div>
+
+      <!-- 4 Thẻ chỉ số chi tiết -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 pt-1">
+        <div class="rounded-2xl border border-neutral border-l-4 border-l-primary bg-white p-4 shadow-2xs space-y-2">
+          <div class="w-8 h-8 rounded-lg bg-primary-soft text-primary-ink font-bold flex items-center justify-center text-sm">$</div>
+          <div id="cardPageValue" class="text-xl font-mono font-bold text-ink">$0.020000</div>
+          <div class="text-[11px] font-bold uppercase text-slate-500 leading-tight">MỖI LƯỢT XEM TRANG</div>
+        </div>
+
+        <div class="rounded-2xl border border-neutral border-l-4 border-l-emerald-500 bg-white p-4 shadow-2xs space-y-2">
+          <div class="w-8 h-8 rounded-lg bg-emerald-50 text-emerald-700 font-bold flex items-center justify-center text-sm">&#128188;</div>
+          <div id="cardRpm" class="text-xl font-mono font-bold text-ink">$20.0000</div>
+          <div class="text-[11px] font-bold uppercase text-slate-500 leading-tight">RPM (TRÊN 1K LƯỢT XEM)</div>
+        </div>
+
+        <div class="rounded-2xl border border-neutral border-l-4 border-l-amber-500 bg-white p-4 shadow-2xs space-y-2">
+          <div class="w-8 h-8 rounded-lg bg-amber-50 text-amber-700 font-bold flex items-center justify-center text-sm">&#128100;</div>
+          <div id="cardRevPerVisitor" class="text-xl font-mono font-bold text-ink">$0.0500</div>
+          <div class="text-[11px] font-bold uppercase text-slate-500 leading-tight">MỖI KHÁCH TRUY CẬP (ƯỚC TÍNH)</div>
+        </div>
+
+        <div class="rounded-2xl border border-neutral border-l-4 border-l-purple-500 bg-white p-4 shadow-2xs space-y-2">
+          <div class="w-8 h-8 rounded-lg bg-purple-50 text-purple-700 font-bold flex items-center justify-center text-sm">&#8679;</div>
+          <div id="cardPotentialAvg" class="text-xl font-mono font-bold text-ink">$3750.00</div>
+          <div class="text-[11px] font-bold uppercase text-slate-500 leading-tight">TIỀM NĂNG Ở MỨC TRUNG BÌNH</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- So sánh điểm chuẩn ngành (Biểu đồ cột SVG) -->
+    <div class="bg-white border border-neutral rounded-2xl p-6 shadow-xs space-y-5">
+      <div class="font-bold text-base text-ink flex items-center gap-2">
+        <span class="w-7 h-7 rounded-lg bg-primary text-ink font-bold text-xs flex items-center justify-center">&#128202;</span>
+        <span>So sánh điểm chuẩn ngành</span>
+      </div>
+
+      <div class="rounded-2xl border border-neutral bg-slate-50/40 p-4 space-y-4">
+        <div id="chartTitle" class="text-xs sm:text-sm font-bold text-center text-ink">So sánh điểm chuẩn ngành Công nghệ</div>
+        <div class="w-full overflow-x-auto">
+          <svg id="benchmarkChart" viewBox="0 0 640 240" class="w-full h-auto max-h-60 select-none"></svg>
+        </div>
+      </div>
+
+      <div class="flex flex-wrap items-center justify-center gap-5 text-xs text-slate-600 pt-1">
+        <span class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-full bg-primary"></span> Giá trị của bạn</span>
+        <span class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-full bg-rose-400"></span> Mức thấp ngành</span>
+        <span class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-full bg-amber-500"></span> Trung bình ngành</span>
+        <span class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-full bg-emerald-500"></span> Mức cao ngành</span>
+      </div>
+    </div>
+
+    <!-- Máy tính mục tiêu lưu lượng truy cập -->
+    <div class="rounded-2xl border border-emerald-300 bg-emerald-50/50 p-6 shadow-xs space-y-4">
+      <div class="space-y-1">
+        <div class="font-bold text-base text-ink flex items-center gap-2">
+          <span class="w-7 h-7 rounded-lg bg-emerald-600 text-white text-xs flex items-center justify-center">&#10003;</span>
+          <span>Máy tính mục tiêu lưu lượng truy cập</span>
+        </div>
+        <p class="text-xs sm:text-sm text-slate-600">Lượt xem trang cần thiết để đạt được mục tiêu doanh thu ở tỷ lệ hiện tại của bạn:</p>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 text-center">
+        <div class="rounded-2xl bg-white border border-emerald-200 p-4 shadow-2xs space-y-1.5">
+          <div class="text-xs font-medium text-slate-500">Để kiếm được $100</div>
+          <div id="goal100" class="text-2xl font-mono font-bold text-emerald-700">5,000</div>
+          <div class="text-xs text-slate-500">lượt xem trang cần thiết</div>
+        </div>
+
+        <div class="rounded-2xl bg-white border border-emerald-200 p-4 shadow-2xs space-y-1.5">
+          <div class="text-xs font-medium text-slate-500">Để kiếm được $1,000</div>
+          <div id="goal1000" class="text-2xl font-mono font-bold text-emerald-700">50,000</div>
+          <div class="text-xs text-slate-500">lượt xem trang cần thiết</div>
+        </div>
+
+        <div class="rounded-2xl bg-white border border-emerald-200 p-4 shadow-2xs space-y-1.5">
+          <div class="text-xs font-medium text-slate-500">Để kiếm được $10,000</div>
+          <div id="goal10000" class="text-2xl font-mono font-bold text-emerald-700">500,000</div>
+          <div class="text-xs text-slate-500">lượt xem trang cần thiết</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Dự báo doanh thu -->
+    <div class="bg-white border border-neutral rounded-2xl p-6 shadow-xs space-y-4">
+      <div class="font-bold text-base text-ink flex items-center gap-2">
+        <span class="w-7 h-7 rounded-lg bg-primary text-ink font-bold text-xs flex items-center justify-center">&#128197;</span>
+        <span>Dự báo doanh thu</span>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-center">
+        <div class="rounded-2xl bg-slate-50/70 border border-neutral p-5 space-y-1.5">
+          <div class="text-xs font-medium text-slate-500">Dự báo hàng tháng</div>
+          <div id="forecastMonthlyRev" class="text-2xl sm:text-3xl font-mono font-bold text-ink">$1500.00</div>
+          <div id="forecastMonthlyPv" class="text-xs font-mono text-slate-500">75,000 lượt xem trang</div>
+        </div>
+
+        <div class="rounded-2xl bg-slate-50/70 border border-neutral p-5 space-y-1.5">
+          <div class="text-xs font-medium text-slate-500">Dự báo hàng năm</div>
+          <div id="forecastYearlyRev" class="text-2xl sm:text-3xl font-mono font-bold text-ink">$18000.00</div>
+          <div id="forecastYearlyPv" class="text-xs font-mono text-slate-500">900,000 lượt xem trang</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+</main>
+
+<script>
+  const INDUSTRY_DATA = {
+    finance:       { name: 'Tài chính & Bảo hiểm', low: 0.02,  avg: 0.08,  high: 0.25 },
+    tech:          { name: 'Công nghệ',            low: 0.01,  avg: 0.05,  high: 0.15 },
+    ecommerce:     { name: 'Thương mại điện tử',   low: 0.005, avg: 0.03,  high: 0.10 },
+    health:        { name: 'Sức khỏe & Sống khỏe', low: 0.01,  avg: 0.04,  high: 0.12 },
+    travel:        { name: 'Du lịch & Lữ hành',    low: 0.008, avg: 0.035, high: 0.09 },
+    entertainment: { name: 'Giải trí',             low: 0.003, avg: 0.015, high: 0.05 },
+    news:          { name: 'Tin tức & Truyền thông',low: 0.002, avg: 0.01,  high: 0.03 },
+    education:     { name: 'Giáo dục',             low: 0.005, avg: 0.025, high: 0.08 }
+  };
+
+  const PERIOD_CONFIG = {
+    daily:     { label: 'HÀNG NGÀY',  monthMult: 30,    yearMult: 365 },
+    weekly:    { label: 'HÀNG TUẦN',  monthMult: 4.33,  yearMult: 52  },
+    monthly:   { label: 'HÀNG THÁNG', monthMult: 1,     yearMult: 12  },
+    quarterly: { label: 'HÀNG QUÝ',   monthMult: 0.33,  yearMult: 4   },
+    yearly:    { label: 'HÀNG NĂM',   monthMult: 0.083, yearMult: 1   }
+  };
+
+  function applyScenario(key) {
+    if (key === 'tech') {
+      document.getElementById('revenueInput').value = 1500;
+      document.getElementById('pageviewsInput').value = 75000;
+      document.getElementById('periodSelect').value = 'monthly';
+      document.getElementById('industrySelect').value = 'tech';
+    } else if (key === 'finance') {
+      document.getElementById('revenueInput').value = 5000;
+      document.getElementById('pageviewsInput').value = 100000;
+      document.getElementById('periodSelect').value = 'monthly';
+      document.getElementById('industrySelect').value = 'finance';
+    } else if (key === 'news') {
+      document.getElementById('revenueInput').value = 800;
+      document.getElementById('pageviewsInput').value = 200000;
+      document.getElementById('periodSelect').value = 'monthly';
+      document.getElementById('industrySelect').value = 'news';
+    } else if (key === 'ecommerce') {
+      document.getElementById('revenueInput').value = 2500;
+      document.getElementById('pageviewsInput').value = 50000;
+      document.getElementById('periodSelect').value = 'monthly';
+      document.getElementById('industrySelect').value = 'ecommerce';
+    }
+    calculatePageValue();
+  }
+
+  function calculatePageValue() {
+    const revenue = Math.max(0, parseFloat(document.getElementById('revenueInput').value) || 0);
+    const pageviews = Math.max(1, parseFloat(document.getElementById('pageviewsInput').value) || 1);
+    const periodKey = document.getElementById('periodSelect').value;
+    const indKey = document.getElementById('industrySelect').value;
+
+    const ind = INDUSTRY_DATA[indKey] || INDUSTRY_DATA.tech;
+    const period = PERIOD_CONFIG[periodKey] || PERIOD_CONFIG.monthly;
+
+    // 1. Giá trị lượt xem trang = Tổng doanh thu / Tổng số lượt xem trang
+    const pageValue = revenue / pageviews;
+    // 2. RPM = Giá trị lượt xem trang x 1000
+    const rpm = pageValue * 1000;
+    // 3. Doanh thu mỗi khách truy cập ước tính (giả định ~2.5 lượt xem/khách)
+    const revPerVisitor = pageValue * 2.5;
+    // 4. Tiềm năng ở mức trung bình ngành = Lượt xem trang * điểm chuẩn trung bình
+    const potentialAvg = pageviews * ind.avg;
+
+    // Cập nhật Hero Dark Card
+    document.getElementById('periodBadge').innerHTML = `<span>&#8627;</span><span>PHÂN TÍCH THEO ${period.label}</span>`;
+    document.getElementById('heroPageValue').textContent = `$${pageValue.toFixed(6)}`;
+    document.getElementById('heroSummaryLine').textContent = `Dựa trên doanh thu $${revenue.toFixed(2)} từ ${Math.round(pageviews).toLocaleString('en-US')} lượt xem trang`;
+    document.getElementById('heroRpm').textContent = `$${rpm.toFixed(4)}`;
+    document.getElementById('heroRevPerVisitor').textContent = `$${revPerVisitor.toFixed(4)}`;
+    document.getElementById('heroPageviews').textContent = Math.round(pageviews).toLocaleString('en-US');
+
+    // Xếp hạng hiệu suất
+    const rankBadge = document.getElementById('perfRankBadge');
+    const progressBar = document.getElementById('perfProgressBar');
+    const descBox = document.getElementById('perfDescriptionBox');
+
+    let rankLabel = '— Trung bình';
+    let pct = 50;
+    let statusText = 'nằm trong phạm vi điển hình của ngành';
+
+    if (pageValue < ind.low) {
+      rankLabel = '↓ Thấp hơn ngành';
+      pct = Math.max(12, (pageValue / ind.low) * 30);
+      statusText = 'thấp hơn mức khởi điểm của ngành';
+    } else if (pageValue > ind.high) {
+      rankLabel = '↑ Cao vượt trội';
+      pct = Math.min(96, 75 + ((pageValue - ind.high) / ind.high) * 20);
+      statusText = 'vượt trên mức cao của ngành';
+    } else if (pageValue >= ind.avg) {
+      rankLabel = '↗ Trên trung bình';
+      pct = 55 + ((pageValue - ind.avg) / Math.max(0.0001, ind.high - ind.avg)) * 25;
+      statusText = 'cao hơn mức trung bình của ngành';
+    } else {
+      rankLabel = '— Trung bình';
+      pct = 32 + ((pageValue - ind.low) / Math.max(0.0001, ind.avg - ind.low)) * 23;
+      statusText = 'nằm trong phạm vi điển hình của ngành';
+    }
+
+    rankBadge.textContent = rankLabel;
+    progressBar.style.width = `${pct.toFixed(1)}%`;
+    descBox.textContent = `Giá trị lượt xem trang của bạn ${statusText}. Giá trị lượt xem trang của bạn được so sánh với điểm chuẩn ngành ${ind.name} (Thấp: $${ind.low}, TB: $${ind.avg}, Cao: $${ind.high}).`;
+
+    // 4 Thẻ chỉ số
+    document.getElementById('cardPageValue').textContent = `$${pageValue.toFixed(6)}`;
+    document.getElementById('cardRpm').textContent = `$${rpm.toFixed(4)}`;
+    document.getElementById('cardRevPerVisitor').textContent = `$${revPerVisitor.toFixed(4)}`;
+    document.getElementById('cardPotentialAvg').textContent = `$${potentialAvg.toFixed(2)}`;
+
+    // Biểu đồ SVG So sánh điểm chuẩn ngành
+    document.getElementById('chartTitle').textContent = `So sánh điểm chuẩn ngành ${ind.name}`;
+    renderBenchmarkSvg(pageValue, ind.low, ind.avg, ind.high);
+
+    // Mục tiêu lưu lượng truy cập (làm tròn xuống thành số nguyên)
+    const g100 = pageValue > 0 ? Math.floor(100 / pageValue) : 0;
+    const g1000 = pageValue > 0 ? Math.floor(1000 / pageValue) : 0;
+    const g10000 = pageValue > 0 ? Math.floor(10000 / pageValue) : 0;
+
+    document.getElementById('goal100').textContent = g100.toLocaleString('en-US');
+    document.getElementById('goal1000').textContent = g1000.toLocaleString('en-US');
+    document.getElementById('goal10000').textContent = g10000.toLocaleString('en-US');
+
+    // Dự báo doanh thu (tháng và năm)
+    const monthlyRev = revenue * period.monthMult;
+    const yearlyRev = revenue * period.yearMult;
+    const monthlyPv = Math.round(pageviews * period.monthMult);
+    const yearlyPv = Math.round(pageviews * period.yearMult);
+
+    document.getElementById('forecastMonthlyRev').textContent = `$${monthlyRev.toFixed(2)}`;
+    document.getElementById('forecastMonthlyPv').textContent = `${monthlyPv.toLocaleString('en-US')} lượt xem trang`;
+    document.getElementById('forecastYearlyRev').textContent = `$${yearlyRev.toFixed(2)}`;
+    document.getElementById('forecastYearlyPv').textContent = `${yearlyPv.toLocaleString('en-US')} lượt xem trang`;
+  }
+
+  function renderBenchmarkSvg(userVal, lowVal, avgVal, highVal) {
+    const svg = document.getElementById('benchmarkChart');
+    const maxRaw = Math.max(userVal, lowVal, avgVal, highVal, 0.02);
+    const maxScale = maxRaw * 1.15;
+
+    const left = 65;
+    const right = 610;
+    const top = 16;
+    const bottom = 195;
+    const height = bottom - top;
+
+    let yGrid = '';
+    for (let i = 0; i <= 4; i++) {
+      const val = (maxScale / 4) * i;
+      const y = bottom - (height * (i / 4));
+      yGrid += `
+        <line x1="${left}" y1="${y}" x2="${right}" y2="${y}" stroke="#e2e8f0" stroke-width="1"/>
+        <text x="${left - 8}" y="${y + 4}" text-anchor="end" font-size="10" fill="#64748b" font-family="monospace">$${val.toFixed(3)}</text>
+      `;
+    }
+
+    const items = [
+      { label: 'Giá trị của bạn', val: userVal, x: 105, fill: '#fdca1e', stroke: '#d97706' },
+      { label: 'Mức thấp ngành',  val: lowVal,  x: 235, fill: '#fda4af', stroke: '#f43f5e' },
+      { label: 'Trung bình ngành', val: avgVal,  x: 365, fill: '#fcd34d', stroke: '#d97706' },
+      { label: 'Mức cao ngành',  val: highVal, x: 495, fill: '#6ee7b7', stroke: '#10b981' }
+    ];
+
+    const barsHtml = items.map(it => {
+      const h = Math.max(6, (it.val / maxScale) * height);
+      const y = bottom - h;
+      return `
+        <rect x="${it.x}" y="${y}" width="88" height="${h}" rx="6" fill="${it.fill}" stroke="${it.stroke}" stroke-width="1.5"/>
+        <text x="${it.x + 44}" y="${bottom + 20}" text-anchor="middle" font-size="11" font-weight="600" fill="#475569">${it.label}</text>
+      `;
+    }).join('');
+
+    svg.innerHTML = `
+      ${yGrid}
+      <line x1="${left}" y1="${bottom}" x2="${right}" y2="${bottom}" stroke="#cbd5e1" stroke-width="1.5"/>
+      ${barsHtml}
+    `;
+  }
+
+  // Khởi chạy với giá trị mặc định giống ảnh mẫu ($1500 / 75000 / Hàng tháng / Công nghệ)
+  calculatePageValue();
+</script>
+</body>
+</html>
